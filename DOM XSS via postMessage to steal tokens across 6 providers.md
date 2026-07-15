@@ -274,11 +274,14 @@ Attacker
 </html>
 ```
 
+The Exploit simply alerts the captured OAuth access token. In a real attack, an attacker could silently exfiltrate it to a server they control.
+
 After a few iterations and a bit of debugging, the exploit worked as expected.
 
 The same technique also worked against Facebook, Flickr, Dropbox,
 Instagram, and Skydrive, but I've kept the write-up focused on a single
 provider to avoid repeating the same flow.
+
 
 ------------------------------------------------------------------------
 
