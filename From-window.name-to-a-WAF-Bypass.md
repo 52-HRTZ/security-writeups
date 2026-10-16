@@ -80,14 +80,14 @@ Decoded `data`:
 alert('XSS on: ' + origin);
 ```
 
-**WAF bypass:** the WAF blocked `alert(`, `eval(`, `javascript`, `data:text/javascript`, `new Function(` in the raw URL. By moving the payload into an external file, the request URL only holds a benign script URL. **A blocklist WAF matches the request string; the sink is a `<script src>` — outsource execution to an external file and there's nothing to match.**
+**WAF bypass:** the WAF blocked `alert(`, `eval(`, `javascript`, `new Function(` in the raw URL. By moving the payload into an external file, the request URL only holds a benign script URL. **A blocklist WAF matches the request string; the sink is a `<script src>` — outsource execution to an external file and there's nothing to match.**
 
 **Not a duplicate:** different source, different patch (`window.name` vs `?data=`), different delivery. Patching one leaves the other open.
 
 ## Why CDN-origin XSS hits harder
 
 `*.cdn-target.com` was in `target.com`'s CSP `script-src` allowlist, and hardcoded as a trusted `postMessage` origin in `wallet.target.com`'s handler. Code exec here = bypassing the main site's CSP + forging wallet messages that the origin check accepts. **Rate severity by who trusts the origin, not by where the alert fired.**
-
+**Note:** The vulnerable CDN origin was also trusted by the site's Wallet application.
 ## Fix
 
 - Don't build `<script>` from input — fire trackers via `fetch()` / `sendBeacon()`.
